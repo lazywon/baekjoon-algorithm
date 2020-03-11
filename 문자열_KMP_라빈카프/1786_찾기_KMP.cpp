@@ -4,6 +4,77 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int num;
+string sentence, pattern;
+
+vector<int> makeTable()
+{
+	int size = (int)pattern.size();
+	vector<int> table(size, 0);
+
+	int j = 0;
+	for (int i = 1; i < size; i++)
+	{
+		while (j != 0 && pattern[i] != pattern[j])
+		{
+			j = table[j - 1];
+		}
+		if (pattern[i] == pattern[j])
+		{
+			table[i] = ++j;
+		}
+	}
+	return table;
+}
+vector<int> kmp()
+{
+	vector<int>t = makeTable();
+	int ssize = (int)sentence.size();
+	int psize = (int)pattern.size();
+
+  vector<int> ans;
+	int j = 0;
+	for (int i = 0; i < ssize; i++)
+	{
+		while (j != 0 && pattern[j] != sentence[i])
+		{
+			j = t[j - 1];
+		}
+		if (pattern[j] == sentence[i])
+		{
+			if (j == psize - 1)
+			{
+
+        ans.push_back(i+2-pattern.size()); //처음 나타난 위치
+				j = t[j];
+			}
+			else
+				j++;
+		}
+	}
+	return ans;
+}
+
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+
+  getline(cin, sentence);
+  getline(cin, pattern);
+
+  vector<int> ans;
+  ans = kmp();
+
+  cout << ans.size() << "\n";
+  for(int i=0;i<ans.size();i++) {
+    cout << ans[i] << "\n";
+  }
+
+  return 0;
+}
+
+
+/*
 vector<int> failure(string& S){
   vector<int> f(S.size());
   int j = 0;
@@ -36,6 +107,7 @@ int main(void) {
   cout << occur.size() << '\n';
   for(auto e : occur) cout << e << ' ';
 }
+*/
 
 
 //라빈카프 코드
